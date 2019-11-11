@@ -1,0 +1,62 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="yoda-component">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <input type="text" placeholder="Nombre" value="{{name::input}}">
+    <input type="text" id="messageInput" placeholder="Mensaje de buenos dias" on-input="_messageChanged">
+    <h2>[[personalGreeting]]</h2>
+  </template>
+
+  <script>
+    /**
+     * `yoda-component`
+     * 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class YodaComponent extends Polymer.Element {
+      static get is() { return 'yoda-component'; }
+      static get properties() {
+        return {
+          morningGreeting: {
+            type: String,
+            value: 'Buenos dias',
+            reflectToAttribute: true,
+            // notify: true,
+            observer: '_morningGreetingChanged'
+          },
+          name: {
+            type: String,
+            value: 'Alfonso'
+          },
+          personalGreeting: {
+            type: String,
+            computed: '_setPersonalGreeting(morningGreeting, name)'
+          }
+        };
+      }
+
+      _morningGreetingChanged() {
+        console.log(this.morningGreeting);
+      }
+
+      _setPersonalGreeting(morningGreeting, name) {
+        return `${morningGreeting} ${name}`;
+      }
+
+      _messageChanged() {
+        const message = this.shadowRoot.querySelector('#messageInput').value;
+        this.morningGreeting = message;
+      }
+    }
+
+    window.customElements.define(YodaComponent.is, YodaComponent);
+  </script>
+</dom-module>
